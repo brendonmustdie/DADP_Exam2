@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    bool coroutineCalled = false;
     public float walkSpeed = 5f;
 
     public Rigidbody2D rb;
@@ -11,11 +13,16 @@ public class PlayerMovement : MonoBehaviour
     Vector2 movement;
 
     float health;
-    float maxHealth = 100f;
+    float maxHealth = 25f;
+
+    public Image healthImge;
+
+    
+    bool colorchange = false;
 
     private void Start()
     {
-        health = 100f;
+        health = 25f;
         rb = this.GetComponent<Rigidbody2D>();
     }
 
@@ -24,10 +31,28 @@ public class PlayerMovement : MonoBehaviour
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
-        if(health >= 0)
+        healthImge.fillAmount = health / maxHealth;
+
+        if (health >= 0)
         {
             Die();
         }
+
+     
+
+        if (colorchange)
+        {
+            if (!coroutineCalled)
+            {
+                StartCoroutine("color");
+            }
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
+        }
+
+
     }
 
     private void FixedUpdate()
@@ -43,6 +68,10 @@ public class PlayerMovement : MonoBehaviour
     private void TakeDamage()
     {
         health -= 5;
+        colorchange = true;
+
+
+
     }
 
     void Die()
@@ -50,5 +79,24 @@ public class PlayerMovement : MonoBehaviour
         //figure out what happens here. 
     }
 
-    
+    IEnumerator color()
+    {
+        while (colorchange)
+        {
+            coroutineCalled = true;
+            GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
+            yield return new WaitForSeconds(0.3f);
+            GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
+            yield return new WaitForSeconds(0.3f);
+            StopFlash();
+        }
+        coroutineCalled = false;
+    }
+
+    void StopFlash()
+    {
+        colorchange = false;
+    }
+
+
 }
