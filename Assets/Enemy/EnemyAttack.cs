@@ -18,18 +18,25 @@ public class EnemyAttack : MonoBehaviour
 
     [SerializeField] float speed = 0.004f;
 
+    public PlayerMovement pm;
+    float damage;
 
 
     float health;
-    float maxHealth;
+    public float maxHealth;
+
+    public bool enemy1;
+    public bool enemy2;
+    public bool enemy3;
   
     private void Start()
     {
-        health = 10;
+        health = maxHealth;
     }
 
     private void Update()
     {
+        damage = pm.damageDone;
         distance = Vector2.Distance(transform.position, player.transform.position);
             Vector2 direction = player.position - transform.position;
         direction.Normalize();
@@ -56,6 +63,11 @@ public class EnemyAttack : MonoBehaviour
             GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
         }
 
+        if(health <= 0)
+        {
+            Die();
+        }
+
 
     }
 
@@ -66,7 +78,7 @@ public class EnemyAttack : MonoBehaviour
 
     void TakeDamage()
     {
-        health -= 1;
+        health -= damage;
         colorchange = true;
 
     }
@@ -88,6 +100,25 @@ public class EnemyAttack : MonoBehaviour
     void StopFlash()
     {
         colorchange = false;
+    }
+
+    void Die()
+    {
+        if(enemy1)
+        { pm.health++;
+        }
+
+        if(enemy2)
+        {
+            pm.health =+ 3;
+        }
+
+        if(enemy3)
+        {
+            pm.damageDone = +1;
+            pm.health = +5;
+        }
+      
     }
 
 }

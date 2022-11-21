@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,13 +13,18 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 movement;
 
-    float health;
+    public float health;
     float maxHealth = 25f;
 
     public Image healthImge;
 
+    public float damageDone;
     
     bool colorchange = false;
+
+    public TMP_Text healthTxt;
+    public TMP_Text attackTxt;
+   
 
     private void Start()
     {
@@ -28,6 +34,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        healthTxt.SetText(health.ToString());
+        attackTxt.SetText(damageDone.ToString());
+
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
